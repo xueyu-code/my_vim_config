@@ -46,21 +46,53 @@ set fileencodings=ucs-bom,utf-8,cp936
 set fileencoding=utf-8"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""新文件标题""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "新建.c,.h,.sh,.java文件，自动插入文件头 
-autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java exec ":call SetTitle()" 
-""定义函数SetTitle，自动插入文件头 
-func SetTitle() 
-    if &filetype == 'cpp'
-        call append(line(".")+6, "#include<iostream>")
-        call append(line(".")+7, "using namespace std;")
-        call append(line(".")+8, "")
-    endif
-    if &filetype == 'c'
-        call append(line(".")+6, "#include<stdio.h>")
-        call append(line(".")+7, "")
-    endif
-    "新建文件后，自动定位到文件末尾
-    autocmd BufNewFile * normal G
-endfunc 
+autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java exec ":call SetTitle()"
+"""定义函数SetTitle，自动插入文件头
+func SetTitle()
+"如果文件类型为.sh文件
+if &filetype == 'sh'
+call setline(1,"\#########################################################################")
+call append(line("."), "\# File Name: ".expand("%"))
+call append(line(".")+1, "\# Author: xueyu")
+call append(line(".")+2, "\#Created Time:".strftime("%c"))
+call append(line(".")+3, "\#########################################################################")
+call append(line(".")+4,"\#!/bin/bash")
+call append(line(".")+5,"")
+else
+call setline(1, "/*************************************************************************")
+call append(line("."), " > File Name: ".expand("%"))
+call append(line(".")+1, " > Author: xueyu")
+call append(line(".")+2, " > Created Time: ".strftime("%c"))
+call append(line(".")+3, " ************************************************************************/")
+call append(line(".")+4, "")
+endif
+if &filetype == 'cpp'
+call append(line(".")+5, "#include<iostream>")
+call append(line(".")+6, "using namespace std;")
+call append(line(".")+7, "")
+call append(line(".")+8, "int main(int argc, char* argv[])")
+call append(line(".")+9, "{")
+call append(line(".")+10, "")
+call append(line(".")+11, "     return 0;")
+call append(line(".")+12, "}")
+call append(line(".")+13, "")
+endif
+if &filetype == 'c'
+call append(line(".")+5, "#include<stdio.h>")
+call append(line(".")+6, "#include<stdlib.h>")
+call append(line(".")+7, "#include<string.h>")
+call append(line(".")+8, "#include<unistd.h>")
+call append(line(".")+9, "#include<pthread.h>")
+call append(line(".")+10, "")
+call append(line(".")+11, "int main(int argc, char* argv[])")
+call append(line(".")+12, "{")
+call append(line(".")+13, "")
+call append(line(".")+14, "     return 0;")
+call append(line(".")+15, "}")
+endif
+"新建文件后，自动定位到文件末尾
+autocmd BufNewFile * normal G
+endfunc   
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "键盘命令
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
